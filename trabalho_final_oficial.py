@@ -12,7 +12,7 @@ from PIL import Image, ImageTk
 arquivo_contas = "dados.txt"
 
 saldo_inicial = 1000.00
-
+0000000000
 contas = {}
 
 saldo_atual = 0.00
@@ -22,6 +22,12 @@ conta_atual = ""
 #========================================
 #     FUNÇÕES
 #========================================
+def botoes_laterais(estado):
+    botao_consultar_saldo.config(state=estado)
+    botao_sacar_dinheiro.config(state=estado)
+    botao_depositar.config(state=estado)
+    botao_sair.config(state=estado)
+
 def carregar_contas():
     global contas
 
@@ -63,6 +69,7 @@ def abrir_frame_de_menu():
         salvar_contas()
 
     label_login.config(text="")
+    botoes_laterais("normal")
     frame_de_menu.lift()
 
 def atualizar_saldo():
@@ -97,16 +104,19 @@ def consultar_saldo():
     frame_consultar_saldo.lift()
 
 def abrir_consultar_saldo():
+    botoes_laterais("disabled")
     consultar_saldo()
 
 def abrir_sacar_dinheiro():
     label_resultado_saque.config(text="")
     valor_saque.delete(0, END)
+    botoes_laterais("disabled")
     frame_sacar_dinheiro.lift()
 
 def abrir_depositar_dinheiro():
     label_resultado_deposito.config(text="")
     valor_deposito.delete(0, END)
+    botoes_laterais("disabled")
     frame_depositar_dinheiro.lift()
 
 def sacar():
@@ -338,7 +348,9 @@ canvas.create_polygon(
 #========================================
 #     BOTOES
 #========================================
-botao_consultar_saldo = Button(canvas, font=("robot", 12, "bold"), width=5, height=5, bg="#8A8A8A", bd=5, command=abrir_consultar_saldo)
+botao_consultar_saldo = Button(canvas, font=("robot", 12, "bold"), width=5, height=5, 
+                               bg="#8A8A8A", bd=5, command=lambda: abrir_consultar_saldo()
+                               if frame_de_menu.winfo_viewable() else None)
 botao_consultar_saldo.place(x=15, y=150)
 
 botao_sacar_dinheiro = Button(canvas, font=("robot", 12, "bold"), width=5, height=5, bg="#8A8A8A", bd=5, command=abrir_sacar_dinheiro)
@@ -350,6 +362,7 @@ botao_depositar.place(x=15, y=300)
 botao_sair = Button(canvas, font=("robot", 12, "bold"), width=5, height=5, bg="#8A8A8A", bd=5, command=sair)
 botao_sair.place(x=570, y=300)
 
+botoes_laterais("disabled")
 #========================================
 #     FRAME CONSULTAR SALDO
 #========================================
@@ -383,8 +396,8 @@ label_saldo.place(relx=0.5, rely=0.5, anchor="center")
 
 Button(frame_consultar_saldo, text="VOLTAR",
       font=("robot", 11, "bold"), bg="#0057B8",
-      fg="white", command=lambda: frame_de_menu.lift()
-).place(x=125, y=300, width=200, height=35)
+      fg="white", command=lambda: (frame_de_menu.lift(), botoes_laterais("normal")
+)).place(x=125, y=300, width=200, height=35)
 
 frame_consultar_saldo.lower()
 
@@ -431,8 +444,8 @@ label_resultado_saque.place(x=15, y=280, width=420, height=55)
 
 Button(frame_sacar_dinheiro, text="VOLTAR",
       font=("robot", 11, "bold"), bg="#0057B8",
-      fg="white", command=lambda: frame_de_menu.lift()
-      ).place(x=125, y=335, width=200, height=35)
+      fg="white", command=lambda: (frame_de_menu.lift(), botoes_laterais("normal")
+)).place(x=125, y=335, width=200, height=35)
 
 frame_sacar_dinheiro.lower()
 
@@ -479,8 +492,8 @@ label_resultado_deposito.place(x=15, y=280, width=420, height=45)
 
 Button(frame_depositar_dinheiro, text="VOLTAR",
       font=("robot", 11, "bold"), bg="#0057B8",
-      fg="white", command=lambda: frame_de_menu.lift()
-      ).place(x=125, y=335, width=200, height=35)
+      fg="white", command=lambda: (frame_de_menu.lift(), botoes_laterais("normal")
+)).place(x=125, y=335, width=200, height=35)
 
 frame_depositar_dinheiro.lower()
 
